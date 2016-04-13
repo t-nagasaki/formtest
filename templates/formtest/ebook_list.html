@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}書籍の一覧{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-header"><a href="/formtest/book/" >書籍の一覧</a>　　電子書籍の一覧</h3>
+    <a href="{% url 'formtest:book_add' %}" class="btn btn-default btn-sm">追加</a>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>書籍名</th>
+          <th>出版社</th>
+          <th>ページ数</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ebook in ebooks %}
+        <tr>
+          <td>{{ ebook.id }}</td>
+          <td>{{ ebook.name }}</td>
+          <td>{{ ebook.publisher }}</td>
+          <td>{{ ebook.page }}</td>
+          <td>{{ ebook.filename }}</td>
+          <td>
+            <a href="{% url 'formtest:ebook_mod' ebook_id=ebook.id %}" class="btn btn-default btn-sm">修正</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}
