@@ -19,7 +19,7 @@ def some_view(request):
     return response
 
 def book_list(request):
-#    return HttpResponse('書籍の一覧')
+#    return HttpResponse('書籍の一覧page')
     books = Book.objects.all().order_by('id')
     books = Book.objects.filter(impressions__comment__contains="good")
     good_impressions = Impression.objects.filter(comment__contains="good")
