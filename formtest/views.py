@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from formtest.models import Book, EBook
+from formtest.models import Book, EBook, Impression
 from formtest.forms import BookForm, EBookForm
 from reportlab.pdfgen import canvas
 from PIL import Image
+from reportlab.lib.units import inch
 
 def some_view(request):
     image = Image.open('/home/nagasaki/img/1680_1050_201005041215072182354.jpg')
     response = HttpResponse(content_type='application/pdf')
     response['COntent-Disposition'] = 'attachment; filename="somefilename.pdf"'
     p = canvas.Canvas(response)
-    p.drawInlineImage(image,0,0)
-    p.drawString(100, 100, "Hello world.")
+    p.drawInlineImage(image,0,0,width=5*inch,height=5*inch)
+    p.drawString(100, 100, u"Hello ねこworld.")
     p.showPage()
     p.save()
     return response
@@ -20,9 +21,13 @@ def some_view(request):
 def book_list(request):
 #    return HttpResponse('書籍の一覧')
     books = Book.objects.all().order_by('id')
+    books = Book.objects.filter(impressions__comment__contains="good")
+    good_impressions = Impression.objects.filter(comment__contains="good")
+    print(good_impressions)
+    #good_impressions = books.all().impressions
     return render(request,
                   'formtest/book_list.html',     # 使用するテンプレート
-                  {'books': books})         # テンプレートに渡すデータ
+                  {'books': books, 'good_impressoin': good_impressions})         # テンプレートに渡すデータ
 
 
 def ebook_list(request):
